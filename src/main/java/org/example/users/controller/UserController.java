@@ -1,5 +1,6 @@
 package org.example.users.controller;
 
+import jakarta.validation.Valid;
 import org.example.users.entity.User;
 import org.example.users.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,9 +42,9 @@ public class UserController {
         //return userService.getUser(userId);/// sin ResponseEntity
     }
 
-    // 3. Crear o actualizar (POST)
+    // 3. Crear o  (POST)
     @PostMapping
-    public ResponseEntity<User> save(@RequestBody User user){
+    public ResponseEntity<User> save(@Valid @RequestBody User user){ //<--- ¡Mira el @Valid!
         userService.saveOrUpdate(user);
         //Devolvemos código 201 (creado) en lugar de 200
         return ResponseEntity.status(HttpStatus.CREATED).body(user);
@@ -51,7 +52,7 @@ public class UserController {
 
     // 4. ACTUALIZAR (PUT)
     @PutMapping("/{userId}")
-    public ResponseEntity<User> update(@PathVariable("userId") Long userId, @RequestBody User user) {
+    public ResponseEntity<User> update(@PathVariable("userId") Long userId,@Valid @RequestBody User user) { // <--- Aquí también @Valid
         Optional<User> userExistente = userService.getUser(userId);
 
         if (userExistente.isPresent()){

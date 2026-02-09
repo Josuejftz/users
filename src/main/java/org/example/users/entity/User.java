@@ -1,6 +1,10 @@
 package org.example.users.entity;
 import jakarta.persistence.*;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
 @Entity //Le dice a spring que esto es una tabla
 @Table(name = "users")  // identico ala base de datos
 public class User {
@@ -8,9 +12,21 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY) //Auto-incrementable
     private Long id;
 
+    // @NotBlank: valida que no sea null si esta vacio ("") ni sea solo espacios
+    @NotBlank(message = "El nombre es obligatorio")
     private String nombre;
+
+    //@Email: Valida que tenga el formato correcto (example@example.com)
+    @NotBlank(message =  "El email es obligatorio")
+    @Email(message = "El email debe ser válido")
+    @Column(unique = true)// Esto es para la BD (mysql) no es validacion de JAVA
     private String email;
+
+    //@Size: Valida longitud minima o maxima
+    @NotBlank(message = "La contraseña es obligatorio")
+    @Size(min = 6,message = "La contraseña debe tener al menos 6 caracteres")
     private String password;
+
 
     //Constructores, getters y setters (Obligatorios)
     public User(){}
